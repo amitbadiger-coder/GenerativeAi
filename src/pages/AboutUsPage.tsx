@@ -1,142 +1,141 @@
+import { Link } from "react-router-dom";
 
-import Container from "@/components/Container";
-
-const testimonials = [
-  {
-    quote: "Aispire helped me get through 5 real interviews with confidence!",
-    name: "Jane D.",
-    role: "Software Engineer",
-  },
-  {
-    quote: "The AI feedback is super insightful and helped me improve fast.",
-    name: "Mark T.",
-    role: "Product Manager",
-  },
-];
-
-const AboutUsPage = () => {
+export default function About() {
   return (
-    <Container>
-      <div className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        {/* Hero */}
-        <section className="text-center mb-16">
-          <h1 className="text-4xl font-extrabold text-neutral-900 mb-4">
-            Shaping the Future of Interview Preparation
-          </h1>
-          <p className="text-lg text-neutral-700 max-w-3xl mx-auto">
-            Aispire is an AI-powered platform built to help job seekers gain
-            confidence and land their dream roles.
+    <div className=" w-full bg-black text-white">
+      
+      {/* HERO */}
+      <section className="relative w-full h-[60vh] flex items-center justify-center">
+        <img
+          src="/img/about.jpeg"
+          className="absolute w-full h-full object-cover opacity-20"
+        />
+        <div className="relative z-10 text-center">
+          <h1 className="text-5xl font-bold">About Our AI Course Generator</h1>
+          <p className="mt-4 text-gray-300 text-lg">
+            Transforming ideas into professional digital courses in minutes.
           </p>
-        </section>
+        </div>
+      </section>
 
-        {/* Mission */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-4">
-            Our Mission
-          </h2>
-          <p className="text-neutral-700 max-w-3xl">
-            Our mission is to democratize high-quality interview preparation
-            using smart AI tools — accessible to everyone, anywhere.
+      {/* OUR MISSION */}
+      <section className="py-20 px-6 md:px-20">
+        <h2 className="text-4xl font-bold text-center mb-12">
+          Our <span className="text-yellow-400">Mission</span>
+        </h2>
+        <div className="max-w-4xl mx-auto text-gray-300 text-lg text-center leading-relaxed">
+          <p>
+            We built this platform to empower creators, educators, and businesses 
+            to generate full-fledged online courses using AI. No editing, no content 
+            writing, no manual structure — just describe your topic and our AI does 
+            the rest.
           </p>
-        </section>
+          <p className="mt-6">
+            Our goal is to make high-quality education accessible and easy to create 
+            for everyone worldwide.
+          </p>
+        </div>
+      </section>
 
-        {/* How it Works */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-6">
-            How It Works
-          </h2>
-          <ul className="list-disc list-inside space-y-2 text-neutral-700 max-w-3xl">
-            <li>AI-driven interview simulations (technical + behavioral)</li>
-            <li>Real-time feedback and scoring</li>
-            <li>Resume parsing and question adaptation</li>
-            <li>Personalized learning insights tailored to you</li>
-          </ul>
-        </section>
+      {/* WHY CHOOSE US */}
+      <section className="py-20 px-6 md:px-20">
+        <h2 className="text-4xl font-bold text-center mb-14">
+          Why <span className="text-yellow-400">Creators</span> Choose Us
+        </h2>
 
-        {/* Why Choose Us */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-6">
-            Why Choose Us?
-          </h2>
-          <ul className="list-disc list-inside space-y-2 text-neutral-700 max-w-3xl">
-            <li>Built with actual recruiter input</li>
-            <li>Uses GPT-based natural language understanding</li>
-            <li>Fast feedback in seconds</li>
-            <li>Simulates real interview environments</li>
-          </ul>
-        </section>
-
-        {/* Team */}
-        <section className="mb-16">
-  <h2 className="text-2xl font-semibold text-neutral-900 mb-6 text-center">
-    Meet the Team
-  </h2>
-  <div className="flex flex-wrap justify-center gap-10">
-    <div className="max-w-xs text-center">
-      <img src="/logo1.png" alt="Santosh Khot" className="mx-auto rounded-md w-32 h-32 object-cover mb-4" />
-      <h3 className="text-lg font-semibold text-neutral-900">Suneel Shinde</h3>
-      <p className="text-neutral-700">Head of Department</p>
-    </div>
-    <div className="max-w-xs text-center">
-      <img src="/logo1.png" alt="Suneel Shinde" className="mx-auto rounded-md w-32 h-32 object-cover mb-4" />
-      <h3 className="text-lg font-semibold text-neutral-900">Santosh Khot</h3>
-      <p className="text-neutral-700">Proffessor And Guide</p>
-    </div>
-    <div className="max-w-xs text-center">
-      <img src="/team/mine1.jpeg" alt="Amit Badiger" className="mx-auto rounded-md w-32 h-32 object-cover mb-4" />
-      <h3 className="text-lg font-semibold text-neutral-900">Amit Badiger</h3>
-      <p className="text-neutral-700">Creator</p>
-    </div>
-  </div>
-</section>
-
-
-        {/* Values */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Our Values</h2>
-          <ul className="list-disc list-inside space-y-2 text-neutral-700 max-w-3xl">
-            <li>Accessibility</li>
-            <li>Honesty in feedback</li>
-            <li>Learning through iteration</li>
-            <li>Inclusion and support for career growth</li>
-          </ul>
-        </section>
-
-        {/* Testimonials */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-6 text-center">
-            What Our Users Say
-          </h2>
-          <div className="max-w-3xl mx-auto space-y-8">
-            {testimonials.map(({ quote, name, role }, i) => (
-              <blockquote
-                key={i}
-                className="bg-gray-100 p-6 rounded-md shadow-sm text-neutral-800"
-              >
-                <p className="mb-4 italic">“{quote}”</p>
-                <footer className="font-semibold">
-                  {name}, <span className="text-neutral-600">{role}</span>
-                </footer>
-              </blockquote>
-            ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+          <div className="bg-white text-black p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold">AI Course Creation</h3>
+            <p className="text-gray-600 mt-3">
+              Turn a simple idea into a full digital course with modules, quizzes, 
+              PDFs, slides & video scripts.
+            </p>
           </div>
-        </section>
 
-        {/* Call to Action */}
-        <section className="text-center">
-          <p className="text-lg text-neutral-700 mb-4">
-            Ready to boost your interview skills?{" "}
-            <a
-              href="/generate"
-              className="text-blue-600 font-semibold hover:underline"
-            >
-              Start your free AI mock interview now.
-            </a>
+          <div className="bg-white text-black p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold">Auto Study Material</h3>
+            <p className="text-gray-600 mt-3">
+              Generate ebooks, summaries, slides, worksheets & interactive content 
+              instantly.
+            </p>
+          </div>
+
+          <div className="bg-white text-black p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold">Easy Publish System</h3>
+            <p className="text-gray-600 mt-3">
+              Export your course or publish it directly to your learning platform 
+              with a single click.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="py-20 px-6 md:px-20">
+        <h2 className="text-4xl font-bold text-center mb-14">
+          How It <span className="text-yellow-400">Works</span>
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+          
+          <div className="bg-white text-black p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold">1. Enter Your Topic</h3>
+            <p className="text-gray-600 mt-3">
+              Simply type your course topic or paste your ideas — AI understands it.
+            </p>
+          </div>
+
+          <div className="bg-white text-black p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold">2. AI Generates Everything</h3>
+            <p className="text-gray-600 mt-3">
+              Modules, lessons, quizzes, summaries, resources — all created in minutes.
+            </p>
+          </div>
+
+          <div className="bg-white text-black p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold">3. Publish or Export</h3>
+            <p className="text-gray-600 mt-3">
+              Download your content or publish directly to your LMS platform.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      {/* TEAM */}
+      <section className="py-20 px-6 md:px-20">
+        <h2 className="text-4xl font-bold text-center mb-14">
+          Meet the <span className="text-yellow-400">Creators</span>
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto">
+          {[
+            { name: "Amit", role: "AI Engineer", img: "/images/user1.jpg" },
+           
+          ].map((m, i) => (
+            <div key={i} className="bg-white text-black p-6 rounded-2xl shadow-xl text-center">
+              <img src={m.img} className="w-28 h-28 rounded-full object-cover mx-auto" />
+              <h3 className="mt-4 text-xl font-bold">{m.name}</h3>
+              <p className="text-gray-600">{m.role}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 px-6 md:px-20">
+        <div className="bg-yellow-400 text-black p-10 rounded-3xl max-w-4xl mx-auto text-center shadow-2xl">
+          <h2 className="text-3xl font-bold">Start Creating Your AI-Powered Course Today</h2>
+          <p className="mt-4 text-lg">
+            Join thousands of creators building smarter, faster, and effortlessly.
           </p>
-        </section>
-      </div>
-    </Container>
+          <Link to="/generate/course">
+          <button className="mt-6 bg-black text-white px-6 py-3 rounded-xl text-lg font-semibold hover:bg-gray-900">
+            Generate Your First Course →
+          </button>
+          </Link>
+        </div>
+      </section>
+    </div>
   );
-};
-
-export default AboutUsPage;
+}

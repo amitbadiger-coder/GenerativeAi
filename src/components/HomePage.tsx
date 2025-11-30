@@ -1,123 +1,184 @@
-import { Sparkles } from "lucide-react"
-import Marquee from "react-fast-marquee"
-import Container from "./Container"
-import { Button } from "./ui/button"
-import { MarkImage } from "./MarkImage"
-import { Link } from "react-router-dom"
-
-
+import { Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import Container from "./Container";
+import { Button } from "./ui/button";
+import Marquee from "react-fast-marquee";
+import { MarkImage } from "./MarkImage";
 
 const HomePage = () => {
   return (
-    <div className="flex-col w-full pb-24">
+    <>    <div className="flex flex-col w-full pb-24 bg-[#f7f7f7]">
+      {/* HERO SECTION */}
       <Container>
-        <div className="my-8">
-          <h2 className="text-3xl text-center md:text-left md:text-6xl">
-            <span className=" text-outline   font-extrabold md:text-8xl">AI POWER</span>
+        <div className="mt-10 md:mt-20 flex flex-col md:flex-row items-center justify-between gap-10">
+          {/* LEFT TEXT */}
+          <div className="flex-1">
+            <p className="uppercase tracking-wide text-sm text-gray-600 mb-2">
+              Empowering businesses worldwide
+            </p>
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight text-black">
+             <span> AI-Powered Digital Course Generator</span>
+            </h1>
 
-            <span className="text-gray-500 font-extrabold">-A Better Way To</span><br/>
-             improve your interview chances and skills
-          </h2>
-          <p className="mt-4 text-muted-foreground text-sm">
-            Boost your interview skills and increase your success Rate  with AI Driven insights.
-            Discover a smarter way to prepare , practice and stand out.
-          </p>
+            <p className="mt-6 text-gray-600 max-w-md">
+              Create complete, high‑quality digital courses instantly with the power of AI. Upload a topic, choose a style, and let the system generate structured modules, lessons, quizzes, summaries, and downloadable materials.
+            </p>
+
+            <div className="flex gap-4 mt-8">
+              <Link to="/generate/course">
+              <Button className="px-6 py-3 bg-yellow-500 text-black rounded-xl font-semibold hover:bg-yellow-600">
+                Generate Course
+              </Button>
+              </Link>
+              <Button variant="outline" className="px-6 py-3 rounded-xl font-semibold">
+                View Samples
+              </Button>
+            </div>
+          </div>
+
+          {/* RIGHT IMAGE */}
+          <div className="flex-1 flex justify-center relative">
+            <div className="relative bg-white rounded-full p-2 shadow-2xl">
+              <img
+                src="/img/round.jpeg"
+                alt="hero"
+                className="w-100 h-100 object-cover rounded-full"
+              />
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-yellow-400 w-40 h-6 rounded-full -mb-3"></div>
+            </div>
+          </div>
         </div>
-   <div className="flex justify-end mt-10">
-  <div className="flex space-x-12 text-right">
-    {/* Offers Received */}
-    <div className="group transition transform hover:scale-105 hover:text-primary duration-300">
-      <p className="text-3xl font-bold text-black dark:text-white">250k+</p>
-      <span className="text-lg font-semibold text-gray-500 group-hover:text-primary">Offers Received</span>
-    </div>
 
-    {/* Interviews Aced */}
-    <div className="group transition transform hover:scale-105 hover:text-primary duration-300">
-      <p className="text-3xl font-bold text-black dark:text-white">1.2M+</p>
-      <span className="text-lg font-semibold text-gray-500 group-hover:text-primary">Interviews Aced</span>
-    </div>
-  </div>
-</div>
-
-         {/* image section */}
-    <div className="relative w-full mt-4 rounded-xl bg-gray-100 h-[420px] drop-shadow overflow-hidden">
-  {/* Image */}
-  <img 
-    src="/img/hero.jpg" 
-    alt="hero_image" 
-    className="w-full h-full object-cover rounded-xl" 
-  />
-
-  {/* Blurry white overlay with hover effect */}
-  <div className="absolute top-4 left-4 px-4 py-2 rounded-md bg-white/30 backdrop-blur-md text-sm font-semibold text-black shadow transition duration-300 ease-in-out hover:backdrop-blur-lg hover:bg-white/50 hover:scale-105">
-    Interview Copilot &copy;
-  </div>
-  <div className="absolute bottom-6 right-6 max-w-sm bg-white/30 backdrop-blur-md text-black dark:text-white rounded-xl p-4 shadow-lg transition duration-300 hover:bg-white/50 hover:backdrop-blur-lg hover:scale-105">
-    <h2 className="text-2xl font-bold mb-2">Interview Copilot</h2>
-    <p className="text-sm mb-4">
-      Leverage AI to guide your interview journey. Get tailored feedback, smart questions, and confidence to land your dream job.
-    </p>
-    <Link to={"/generate"}>
-    <Button className="flex items-center gap-2 px-4 py-2 bg-black text-white hover:bg-gray-800 transition">
-      Generate <Sparkles className="w-4 h-4" />
-    </Button>
-    </Link>
-  </div>
-
-</div>
+        {/* METRICS */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mt-16 bg-black text-white rounded-2xl py-10 px-4 shadow-xl">
+          <div>
+            <p className="text-3xl font-bold">2000+</p>
+            <p className="text-gray-400">Courses Generated</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold">10+</p>
+            <p className="text-gray-400">Topics Supported</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold">800+</p>
+            <p className="text-gray-400">Modules Auto‑Generated</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold">150M+</p>
+            <p className="text-gray-400">Users Worldwide</p>
+          </div>
+        </div>
       </Container>
-      <div className="w-full my-12">
+
+      {/* BRAND MARQUEE */}
+      <div className="w-full my-16">
         <Marquee pauseOnHover>
-          <MarkImage img="/img/logo/firebase.png"/>
-          <MarkImage img="/img/logo/meet.png"/>
-          <MarkImage img="/img/logo/microsoft.png"/>
-          <MarkImage img="/img/logo/react.png"/>
-          <MarkImage img="/img/logo/tailwindcss.png"/>
-          <MarkImage img="/img/logo/zoom.png"/>
-          </Marquee>
-
-      </div>
-     <Container className="py-12">
-  {/* Hoverable Container */}
-  <div className="transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl rounded-xl overflow-hidden group">
-    {/* Heading */}
-    <h2 className="tracking-wide text-xl text-gray-800 font-semibold text-center md:text-left mb-8 px-4">
-      Prepare like a pro. Ace every question. Land your dream job faster with AI-driven insights.
-    </h2>
-
-    {/* Grid Layout */}
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-center px-4 pb-6">
-      {/* Image */}
-      <div className="col-span-1 md:col-span-3">
-        <img
-          src="img/office.jpg"
-          alt="office img"
-          className="w-full max-h-96 rounded-lg object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-        
+          <MarkImage img="/img/logo/c.jpeg" />
+          <MarkImage img="/img/logo/c1.jpeg" />
+          <MarkImage img="/img/logo/html.jpeg" />
+          <MarkImage img="/img/logo/java.jpeg" />
+          <MarkImage img="/img/logo/py.jpeg" />
+          <MarkImage img="/img/logo/js.jpeg" />
+          <MarkImage img="/img/logo/mysql.jpeg" />
+          <MarkImage img="/img/logo/node.jpeg" />
+          <MarkImage img="/img/logo/php.jpeg" />
+          <MarkImage img="/img/logo/react.jpeg" />
+        </Marquee>
       </div>
 
-      {/* Text + Button */}
-      <div className="col-span-1 md:col-span-2 flex flex-col justify-between h-full bg-white/70 backdrop-blur-md rounded-lg p-6 shadow-md transition group-hover:shadow-xl">
-        <p className="text-center md:text-left text-gray-600 mb-6">
-          Every great career starts with preparation. Start yours today with AI-guided mock interviews.
-          <br /><br />
-          Don’t just interview — impress. Get personalized feedback tailored just for you.
-        </p>
+      {/* SECOND SECTION */}
+     <Container>
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-gradient-to-br from-gray-900 to-black rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-800 relative overflow-hidden">
+    
+    {/* Background decorative elements */}
+    <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl -translate-y-36 translate-x-36"></div>
+    <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -translate-x-32 translate-y-32"></div>
+    
+    {/* TEXT CONTENT */}
+    <div className="relative z-10">
+      <div className="inline-flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/20 rounded-full px-4 py-2 mb-6">
+        <Sparkles className="w-4 h-4 text-yellow-400" />
+        <span className="text-yellow-400 text-sm font-medium">AI-Powered Learning</span>
+      </div>
+      
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white leading-tight">
+        Create Stunning Courses in{' '}
+        <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
+          Seconds
+        </span>
+      </h2>
+      
+      <p className="text-gray-300 mb-2 text-lg leading-relaxed">
+        Transform your expertise into engaging digital courses with AI. 
+        No design skills needed.
+      </p>
+      
+      <ul className="space-y-3 mb-8">
+        {[
+          "🎯 AI-generated content & images",
+          "⚡ Instant PPTs, PDFs & full courses", 
+          "🎨 Professional layouts automatically",
+          "🚀 No technical skills required"
+        ].map((item, index) => (
+          <li key={index} className="flex items-center gap-3 text-gray-300">
+            <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+            {item}
+          </li>
+        ))}
+      </ul>
 
-        <Link to="/generate" className="flex justify-center md:justify-start">
-          <Button className="w-3/4 flex items-center justify-center gap-2 transition hover:scale-105">
-            Generate <Sparkles className="w-4 h-4" />
+      <div className="flex flex-col sm:flex-row gap-4">
+        <Link to="/generate">
+          <Button className="px-8 py-4 flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-300 hover:to-yellow-400 transition-all shadow-lg hover:shadow-yellow-500/25">
+            Create Your Course <Sparkles className="w-5 h-5" />
           </Button>
         </Link>
+        
+        <Button variant="outline" className="px-8 py-4 border-2 border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 transition-all">
+          View Examples
+        </Button>
+      </div>
+      
+      <div className="flex items-center gap-4 mt-8 text-sm text-gray-400">
+        <div className="flex items-center gap-2">
+          <div className="flex -space-x-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="w-6 h-6 bg-gradient-to-r from-yellow-400 to-yellow-300 rounded-full border-2 border-gray-900"></div>
+            ))}
+          </div>
+          <span>500+ courses created</span>
+        </div>
+      </div>
+    </div>
+
+    {/* IMAGE */}
+    <div className="relative z-10">
+      <div className="relative">
+        <img
+          src="/img/hero2.jpeg"
+          alt="AI Course Generator Interface"
+          className="w-full rounded-2xl shadow-2xl border border-gray-700 transform hover:scale-105 transition-transform duration-300"
+        />
+        
+        {/* Floating elements */}
+        <div className="absolute -top-4 -right-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-4 py-2 rounded-xl font-bold shadow-lg">
+          AI Generated
+        </div>
+        
+        <div className="absolute -bottom-4 -left-4 bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-3 rounded-xl shadow-lg border border-gray-200">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="font-semibold text-sm">Ready in 30s</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </Container>
-
-
     </div>
-  )
-}
+    </>
 
-export default HomePage
+  );
+};
+
+export default HomePage;

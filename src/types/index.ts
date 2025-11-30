@@ -36,3 +36,10 @@ export interface UserAnswers{
     createdAt:Timestamp
     updatedAt:Timestamp
 }
+
+interface Course {
+  id: string;
+  userId: string;
+  title?: string;
+  description?: string;
+}

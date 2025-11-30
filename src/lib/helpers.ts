@@ -1,5 +1,4 @@
 
-
 export const MainRoutes=[
     {
         label:"Home",
@@ -13,8 +12,5 @@ export const MainRoutes=[
        label:"About Us",
         href:"/about",
     },
-    {
-       label:"ResumeReader",
-        href:"/reader",
-    },
+    
 ];

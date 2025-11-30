@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import Container from "./Container";
 import { cn } from "@/lib/utils";
 import LogoContainer from "./LogoContainer";
-import NavigationRoute from "./Routes/NavigationRoute";
 import ProfileContainer from "./ProfileContainer";
 import ToggleContainer from "./ToggleContainer";
 
@@ -12,48 +11,97 @@ const Header = () => {
   const { userId } = useAuth();
 
   return (
-    <header
-      className={cn(
-        "w-full border-b duration-150 transition-all ease-in-out py-2"
-      )}
-    >
+    <header className="w-full py-4">
       <Container>
-        <div className="flex items-center justify-between w-full">
-          {/* Left: Logo + Brand */}
-          <div className="flex items-center gap-2">
+        {/* MAIN NAVBAR WRAPPER */}
+        <div className="w-full bg-black text-white rounded-full px-8 py-3 shadow-lg flex items-center justify-between">
+
+          {/* LEFT SIDE: LOGO + BRAND */}
+          <div className="flex items-center gap-3">
             <LogoContainer />
             <NavLink
               to="/"
-              className="text-xl font-bold text-neutral-800 hover:text-neutral-600 transition-all duration-200 transform hover:scale-105"
+              className="text-xl font-semibold hover:text-yellow-400 transition"
             >
-              Aispire
+              GenCourse
             </NavLink>
           </div>
 
-          {/* Center: Navigation */}
-          <nav className="hidden md:flex items-center gap-3 flex-1 justify-center">
-            <NavigationRoute />
+          {/* CENTER NAVIGATION */}
+          <nav className="hidden md:flex items-center gap-8 text-sm">
+            
+            {/* Home */}
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                cn(
+                  "px-3 py-1 rounded-full transition-all",
+                  isActive
+                    ? "bg-yellow-400 text-black font-semibold"
+                    : "hover:text-yellow-400"
+                )
+              }
+            >
+              Home
+            </NavLink>
+
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                cn(
+                  "px-3 py-1 rounded-full transition-all",
+                  isActive
+                    ? "bg-yellow-400 text-black font-semibold"
+                    : "hover:text-yellow-400"
+                )
+              }
+            >
+              About Us
+            </NavLink>
+
+          
+
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                cn(
+                  "px-3 py-1 rounded-full transition-all",
+                  isActive
+                    ? "bg-yellow-400 text-black font-semibold"
+                    : "hover:text-yellow-400"
+                )
+              }
+            >
+              Contact
+            </NavLink>
+
+            {/* Generate Course - Only If Logged In */}
             {userId && (
-             <NavLink
-  to="/generate"
-  className={({ isActive }) =>
-    cn(
-      "text-base text-neutral-600 transition-all duration-200 pb-1",
-      isActive &&
-        "text-neutral-900 font-semibold border-b-2 border-neutral-900"
-    )
-  }
->
-  Take an Interview
-</NavLink>
+              <NavLink
+                to="/generate/course"
+                className={({ isActive }) =>
+                  cn(
+                    "px-4 py-2 rounded-full font-semibold transition",
+                    isActive
+                      ? "bg-yellow-400 text-black ring-2 ring-yellow-200"
+                      : "hover:text-yellow-400"
+                  )
+                }
+              >
+                Generate Course
+              </NavLink>
             )}
           </nav>
 
-          {/* Right: Profile + Toggle */}
-          <div className="flex items-center gap-6 flex-gr">
-            {/* Increase profile size here */}
-            <ProfileContainer  />
+          {/* RIGHT SIDE: PROFILE + THEME TOGGLE */}
+          <div className="flex items-center gap-5">
+
             <ToggleContainer />
+
+            {/* Larger Profile Avatar */}
+        <div className="scale-1200 size-80px">
+  <ProfileContainer />
+</div>
           </div>
         </div>
       </Container>

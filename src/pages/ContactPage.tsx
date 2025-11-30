@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Container from "@/components/Container";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/config/Firebase.config";
-import { useUser } from "@clerk/clerk-react"; // Using Clerk Auth
+import { useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 const ContactPage = () => {
   const { user, isSignedIn } = useUser();
@@ -18,7 +19,7 @@ const ContactPage = () => {
     if (isSignedIn && user?.primaryEmailAddress?.emailAddress) {
       setFormData((prev) => ({
         ...prev,
-        email: user?.primaryEmailAddress?.emailAddress ?? " ",
+        email: user?.primaryEmailAddress?.emailAddress ?? "",
       }));
     }
   }, [isSignedIn, user]);
@@ -28,8 +29,10 @@ const ContactPage = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const toastMessage =  { title: "send..!", description: "Message Send Successfully..." }
-  
+  const toastMessage = {
+    title: "Sent!",
+    description: "Message sent successfully.",
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,83 +45,137 @@ const ContactPage = () => {
         userId: isSignedIn ? user?.id : null,
       });
 
-      
       toast(toastMessage.title, { description: toastMessage.description });
-      setFormData({ name: "", email: isSignedIn ? formData.email : "", message: "" });
+
+      setFormData({
+        name: "",
+        email: isSignedIn ? formData.email : "",
+        message: "",
+      });
     } catch (error) {
-      console.error("Error sending message:", error);
-      toast.error("Error..",{
-        description:"Something went wrong please. Please try Again later..."
-      })
+      console.error("Error:", error);
+      toast.error("Error", { description: "Something went wrong, try again later." });
     }
   };
 
   return (
-    <Container>
-      <div className="max-w-2xl mx-auto py-12">
-        <h1 className="text-3xl font-bold text-neutral-800 mb-4">Contact Us</h1>
-        <p className="text-neutral-600 mb-8">
-          Have questions, feedback, or need support? Fill out the form below and we’ll get back to you soon.
-        </p>
+    <div className="w-full bg-black pb-20">
+      <Container>
+        {/* HEADER */}
+        <div className="text-center pt-16 pb-10">
+          <h1 className="text-4xl font-bold text-white mb-3">Contact Us</h1>
+          <p className="text-gray-400 max-w-xl mx-auto">
+            Have questions or need help? Fill out the form below.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-neutral-700">
-              Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              className="mt-1 block w-full border border-gray-900 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            />
+        {/* FORM + NEWSLETTER */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+          {/* LEFT — CONTACT FORM */}
+          <div className="lg:col-span-2 p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur">
+            <form onSubmit={handleSubmit} className="space-y-6">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  required
+                  onChange={handleChange}
+                  className="w-full bg-white/10 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-yellow-400 outline-none"
+                />
+
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={formData.email}
+                  onChange={handleChange}
+                  disabled={isSignedIn}
+                  className="w-full bg-white/10 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-yellow-400 outline-none disabled:opacity-50"
+                />
+              </div>
+
+              <textarea
+                name="message"
+                rows={5}
+                placeholder="Write your message..."
+                value={formData.message}
+                onChange={handleChange}
+                required
+                className="w-full bg-white/10 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-yellow-400 outline-none"
+              ></textarea>
+
+              <button
+                type="submit"
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl transition"
+              >
+                Send Message
+              </button>
+            </form>
           </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
-              Email
-            </label>
+          {/* RIGHT — NEWSLETTER BOX */}
+          <div className="p-8 rounded-3xl bg-white/10 border border-white/10 backdrop-blur">
+            <h2 className="text-2xl font-semibold text-white mb-3">Our Newsletter</h2>
+            <p className="text-gray-300 text-sm mb-6">
+              Stay updated with new AI course features, announcements & offers.
+            </p>
+
             <input
-              id="email"
-              name="email"
               type="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              disabled={isSignedIn} // Make it readonly for logged-in users
-              className="mt-1 block w-full border border-gray-900 bg-gray-100 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              placeholder="Enter your email"
+              className="w-full bg-white/10 text-white px-4 py-3 rounded-xl mb-4 outline-none focus:ring-2 focus:ring-yellow-400"
             />
-          </div>
 
-          <div>
-            <label htmlFor="message" className="block text-sm font-medium text-neutral-700">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={5}
-              required
-              value={formData.message}
-              onChange={handleChange}
-              className="mt-1 block w-full border border-gray-900 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            ></textarea>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-400 transition-all duration-200"
-            >
-              Send Message
+            <button className="w-full bg-black text-white border border-white/20 hover:bg-yellow-400 hover:text-black transition py-3 rounded-xl">
+              Subscribe
             </button>
           </div>
-        </form>
-      </div>
-    </Container>
+        </div>
+
+        {/* CONTACT INFO CARDS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+
+          <div className="p-6 bg-white/5 rounded-2xl border border-white/10 text-center">
+            <Phone className="mx-auto text-yellow-400" size={30} />
+            <h4 className="text-white font-semibold mt-4">(+876) 765 865</h4>
+            <p className="text-gray-400 text-sm mt-2">
+              Call us anytime for support.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white/5 rounded-2xl border border-white/10 text-center">
+            <Mail className="mx-auto text-yellow-400" size={30} />
+            <h4 className="text-white font-semibold mt-4">mail@aispire.in</h4>
+            <p className="text-gray-400 text-sm mt-2">
+              Email us for enquiries.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white/5 rounded-2xl border border-white/10 text-center">
+            <MapPin className="mx-auto text-yellow-400" size={30} />
+            <h4 className="text-white font-semibold mt-4">KLE MCA College</h4>
+            <p className="text-gray-400 text-sm mt-2">
+              Chikodi, Karnataka
+            </p>
+          </div>
+        </div>
+
+        {/* MAP SECTION */}
+        <div className="mt-16 rounded-3xl overflow-hidden border border-white/10">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18..."
+            className="w-full h-72"
+            allowFullScreen
+            loading="lazy"
+          ></iframe>
+        </div>
+
+      </Container>
+    </div>
   );
 };
 
