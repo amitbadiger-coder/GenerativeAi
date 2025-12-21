@@ -149,7 +149,7 @@ const ContactPage = () => {
 
           <div className="p-6 bg-white/5 rounded-2xl border border-white/10 text-center">
             <Mail className="mx-auto text-yellow-400" size={30} />
-            <h4 className="text-white font-semibold mt-4">mail@aispire.in</h4>
+            <h4 className="text-white font-semibold mt-4">mail@GenCourse.in</h4>
             <p className="text-gray-400 text-sm mt-2">
               Email us for enquiries.
             </p>

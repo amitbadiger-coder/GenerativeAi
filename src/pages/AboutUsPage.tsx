@@ -110,7 +110,7 @@ export default function About() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto">
           {[
-            { name: "Amit", role: "AI Engineer", img: "/images/user1.jpg" },
+            { name: "Sukanya", role: "Developer", img: "/public/logo1.png" },
            
           ].map((m, i) => (
             <div key={i} className="bg-white text-black p-6 rounded-2xl shadow-xl text-center">

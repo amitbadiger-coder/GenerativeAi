@@ -19,6 +19,38 @@ const ViewContent = () => {
 
   const [content, setContent] = useState<CourseContent | null>(null);
   const [loading, setLoading] = useState(true);
+  const [speaking, setSpeaking] = useState(false);
+const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
+
+const speakText = (text: string) => {
+  if (!text) return;
+
+  window.speechSynthesis.cancel(); // stop previous
+
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.rate = 1;    // speed
+  speech.pitch = 1;   // voice tone
+  speech.volume = 1; // volume
+
+  speech.onend = () => setSpeaking(false);
+
+  setUtterance(speech);
+  setSpeaking(true);
+  window.speechSynthesis.speak(speech);
+};
+
+const pauseSpeech = () => {
+  window.speechSynthesis.pause();
+};
+
+const resumeSpeech = () => {
+  window.speechSynthesis.resume();
+};
+
+const stopSpeech = () => {
+  window.speechSynthesis.cancel();
+  setSpeaking(false);
+};
 
   useEffect(() => {
     async function load() {
@@ -35,6 +67,31 @@ const ViewContent = () => {
     }
     load();
   }, [id]);
+  const AudioControls = ({ text }: { text: string }) => (
+  <div className="flex gap-3 mt-4">
+    <button
+      onClick={() => speakText(text)}
+      className="px-4 py-2 bg-yellow-400 text-black rounded-lg font-semibold"
+    >
+      ▶ Play Audio
+    </button>
+
+    <button
+      onClick={pauseSpeech}
+      className="px-4 py-2 bg-black text-yellow-400 rounded-lg border border-yellow-400"
+    >
+      ⏸ Pause
+    </button>
+
+    <button
+      onClick={stopSpeech}
+      className="px-4 py-2 bg-red-500 text-white rounded-lg"
+    >
+      ⏹ Stop
+    </button>
+  </div>
+);
+
 
   // Download PDF function
   const downloadPDF = async () => {
@@ -402,6 +459,10 @@ const ViewContent = () => {
     return (
       <div className="space-y-5 p-5">
         <h2 className="text-2xl font-bold mb-3 text-black p-4">Presentation Slides</h2>
+        <AudioControls
+  text={slides.map((s: any) => `${s.title}. ${s.content}`).join(" ")}
+/>
+
         {slides.map((slide: any, index: number) => (
           <div key={index} className="border-2 border-yellow-400 rounded-lg p-6 bg-white shadow-md">
             <h3 className="text-xl font-semibold mb-3 text-black">
@@ -438,6 +499,7 @@ const ViewContent = () => {
               <span className="text-lg">🖨️</span>
               Print Summary
             </button>
+            
           </div>
         </div>
 
@@ -446,6 +508,8 @@ const ViewContent = () => {
             <div className="text-black whitespace-pre-line text-lg leading-relaxed text-justify bg-white p-8 rounded-lg border-2 border-yellow-400 shadow-sm">
               {summaryContent}
             </div>
+
+            <AudioControls text={summaryContent} />
             
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 bg-yellow-100 inline-block px-4 py-2 rounded-full">
@@ -454,6 +518,7 @@ const ViewContent = () => {
             </div>
           </div>
         </div>
+        
       </div>
     );
   };
@@ -492,6 +557,8 @@ const ViewContent = () => {
             <div className="bg-white p-8 rounded-lg border-2 border-yellow-400 shadow-sm">
               <div className="text-black whitespace-pre-line text-base leading-relaxed">
                 {pdfContent}
+                <AudioControls text={pdfContent} />
+
               </div>
             </div>
             
@@ -509,20 +576,32 @@ const ViewContent = () => {
   const renderFullCourse = () => {
   const modules = content?.generated?.modules || [];
   
+  
   if (modules.length === 0) {
     return (
+      
       <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-black">No Modules Available</h3>
         <p className="text-gray-800">Full course content is not available.</p>
       </div>
     );
   }
-  
+ const fullCourseText = modules
+  .map((m: any) =>
+    `Module ${m.moduleTitle}. ${
+      m.lessons?.map((l: any) => l.content).join(" ")
+    }`
+  )
+  .join(" ");
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pl-4 pb-3">
       {/* Course Header with Download Button */}
+      
       <div className="flex justify-between items-center mb-6 p-3 pt-9">
+        
         <h2 className="text-2xl font-bold text-black pr-8">Course Modules</h2>
+         
         <button
           onClick={downloadFullCoursePDF}
           className="px-6 py-3 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition-colors font-semibold flex items-center gap-2 border-2 border-yellow-400 hover:border-yellow-500"
@@ -530,6 +609,7 @@ const ViewContent = () => {
           <span className="text-lg">📥</span>
           Download Full Course
         </button>
+        
       </div>
 
       {/* Course Overview */}
@@ -689,6 +769,7 @@ const ViewContent = () => {
           </ul>
         </div>
       )}
+      <AudioControls text={fullCourseText} />
     </div>
   );
 };
