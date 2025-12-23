@@ -1,22 +1,24 @@
 // src/pages/ViewCourseDetails.jsx
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { getCourseById } from "@/api/courseApi"; 
-import { getContentsByCourseId } from "@/api/courseApi";   // Assuming this API exists
+import  { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom"; 
+import { getContentsByCourseId, getCourseById } from "@/api/userApi";   // Assuming this API exists
 import CourseContentPin from "@/components/card/CoursePin"; // Pin for PDF/Summary
 
 // Interface for content items (match your Firestore structure)
-interface CourseContent {
-    id: string;
-    title: string;
-    description: string;
-    contentType: 'PDF' | 'Summary' | 'PPT' | string;
-    createdAt: any;
-    // other fields...
+ export interface CourseContent {
+  coverImage: any;
+  id: string;
+  title: string;
+  description: string;
+  level: string;
+  duration: string;
+  modules: number;
+  outputType: "ppt" | "summary" | "pdf" | "full-course";
+  generated: any;
 }
 
 const ViewCourseDetails = () => {
-    const { id: courseId } = useParams<{ id: string }>(); 
+   const { courseId } = useParams<{ courseId: string }>();
     const navigate = useNavigate();
 
     const [course, setCourse] = useState<any>(null);
@@ -24,6 +26,7 @@ const ViewCourseDetails = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+         if (!courseId) return;
         async function loadCourseData() {
             setLoading(true);
             try {
@@ -85,6 +88,7 @@ const ViewCourseDetails = () => {
                             // 🔑 Call the handler that navigates to the ViewContent page
                             onRead={() => handleViewContent(item.id)}
                             onDelete={handleDeleteContent} 
+                            onEdit={(id) => handleViewContent(id)}
                         />
                     ))
                 ) : (

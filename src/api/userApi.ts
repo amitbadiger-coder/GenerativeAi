@@ -68,9 +68,8 @@ export async function getContentsByCourseId(
   }));
 }
 
-export const updateCourse = async (courseId: string | undefined , updates: any) => {
+export const updateCourse = async (courseId: string, updates: any) => {
   try {
-    if(!courseId) return;
     const courseRef = doc(db, "courses", courseId);
     await updateDoc(courseRef, {
       ...updates,

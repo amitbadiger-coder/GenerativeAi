@@ -4,17 +4,23 @@ import React from "react";
 import { Eye, Pencil, Trash, BookOpen, Image as ImgIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import type { CourseContent } from "@/pages/ViewCourseDetails";
+
+
+// type Course = CourseContent;
 
 interface CoursePinProps {
-    course: any;
+    content:Partial<CourseContent>;
     index?: number; 
     onRead: (id: string) => void;
     onDelete: (id: string) => void;
     onEdit: (id: string) => void;
 }
 
+
+
 const CourseContentPin: React.FC<CoursePinProps> = ({
-    course,
+    content,
     index = 0,
     onRead,
     onDelete,
@@ -30,11 +36,11 @@ const CourseContentPin: React.FC<CoursePinProps> = ({
 
     const theme = cardThemes[index % 3];
 
-    const contentType = course?.outputType?.toUpperCase() || "COURSE";
+    const contentType = content?.outputType?.toUpperCase() || "content";
 
     // Thumbnail logic
     const thumbnail =
-        course?.coverImage || course?.generated?.images?.cover||
+        content?.coverImage || content?.generated?.images?.cover||
         "https://via.placeholder.com/400x220?text=AI+Course+Image";
 
     return (
@@ -52,12 +58,12 @@ const CourseContentPin: React.FC<CoursePinProps> = ({
             <div className="w-full h-40 rounded-xl overflow-hidden mb-4 relative group">
                 <img
                     src={thumbnail}
-                    alt={course?.title || "Course image"}
+                    alt={content?.title || "Course image"}
                     className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
                 />
 
                 {/* If image missing, show icon overlay */}
-                {!course?.image && (
+                {!content?.coverImage && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                         <ImgIcon className="w-10 h-10 text-white" />
                     </div>
@@ -71,24 +77,24 @@ const CourseContentPin: React.FC<CoursePinProps> = ({
 
             {/* TITLE */}
             <h2 className="text-xl font-bold leading-tight">
-                {course?.title || "Untitled Course"}
+                {content?.title || "Untitled Course"}
             </h2>
 
             {/* DESCRIPTION */}
             <p className="mt-2 text-sm opacity-80 line-clamp-2">
-                {course?.description || "AI generated course overview."}
+                {content?.description || "AI generated course overview."}
             </p>
 
             {/* METADATA BADGES */}
             <div className="flex gap-2 mt-3 flex-wrap">
                 <Badge className="bg-gray-200 text-black">
-                    {course?.modules || 0} Modules
+                    {content?.modules || 0} Modules
                 </Badge>
                 <Badge className="bg-gray-200 text-black">
-                    {course?.level || "All Levels"}
+                    {content?.level || "All Levels"}
                 </Badge>
                 <Badge className="bg-gray-200 text-black">
-                    {course?.duration || "Self-paced"}
+                    {content?.duration || "Self-paced"}
                 </Badge>
             </div>
 
@@ -106,9 +112,11 @@ const CourseContentPin: React.FC<CoursePinProps> = ({
                         variant="ghost"
                         className="hover:bg-gray-300 rounded-full"
                         onClick={(e) => {
-                            e.stopPropagation();
-                            onRead(course.id);
-                        }}
+    e.stopPropagation();
+    if (content.id) {
+        onRead(content.id);
+    }
+}}
                     >
                         <Eye className="w-4 h-4" />
                     </Button>
@@ -119,9 +127,11 @@ const CourseContentPin: React.FC<CoursePinProps> = ({
                         variant="ghost"
                         className="hover:bg-yellow-300 rounded-full"
                         onClick={(e) => {
-                            e.stopPropagation();
-                            onEdit(course.id);
-                        }}
+    e.stopPropagation();
+    if (content.id) {
+        onEdit(content.id);
+    }
+}}
                     >
                         <Pencil className="w-4 h-4" />
                     </Button>
@@ -132,11 +142,12 @@ const CourseContentPin: React.FC<CoursePinProps> = ({
                         variant="ghost"
                         className="hover:bg-red-300 rounded-full"
                         onClick={(e) => {
-                            e.stopPropagation();
-                            if (confirm("Delete this course permanently?")) {
-                                onDelete(course.id);
-                            }
-                        }}
+    e.stopPropagation();
+    // Only proceed if content.id exists AND user confirms
+    if (content.id && confirm("Delete this course permanently?")) {
+        onDelete(content.id);
+    }
+}}
                     >
                         <Trash className="w-4 h-4" />
                     </Button>

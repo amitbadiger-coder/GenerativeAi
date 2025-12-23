@@ -37,9 +37,9 @@ export interface UserAnswers{
     updatedAt:Timestamp
 }
 
-interface Course {
-  id: string;
-  userId: string;
-  title?: string;
-  description?: string;
-}
+// interface Course {
+//   id: string;
+//   userId: string;
+//   title?: string;
+//   description?: string;
+// }

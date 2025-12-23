@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getCourseById, updateContent } from "@/api/courseApi";
@@ -6,38 +6,61 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/components/ui/use-toast";
+// import { Switch } from "@/components/ui/switch";
+// import { useToast } from "@/components/ui/use-toast";
 import { Sun, Moon, Save, Image as ImageIcon, ArrowLeft } from "lucide-react";
+import type { CourseContent } from "./ViewCourseDetails";
 
 export default function EditPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const [content, setContent] = useState(null);
+   const [content, setContent] = useState<CourseContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [dark, setDark] = useState(true);
 
+  // useEffect(() => {
+  //   let mounted = true;
+  //   async function load() {
+  //     try {
+  //       const data = await getCourseById(id);
+  //       if (!mounted) return;
+  //       setContent(data);
+  //     } catch (err) {
+  //       console.error(err);
+  //       setContent({ title: "", description: "", imge: "" });
+  //     } finally {
+  //       if (mounted) setLoading(false);
+  //     }
+  //   }
+  //   load();
+  //   return () => (mounted = false);
+  // }, [id]);
   useEffect(() => {
-    let mounted = true;
-    async function load() {
-      try {
-        const data = await getCourseById(id);
-        if (!mounted) return;
-        setContent(data);
-      } catch (err) {
-        console.error(err);
-        setContent({ title: "", description: "", image: "" });
-      } finally {
-        if (mounted) setLoading(false);
-      }
+  let mounted = true;
+
+  const load = async () => {
+    try {
+      const data = await getCourseById(id);
+      if (mounted) setContent(data);
+    } catch (err) {
+      console.error(err);
+      if (mounted) setContent(null);
+    } finally {
+      if (mounted) setLoading(false);
     }
-    load();
-    return () => (mounted = false);
-  }, [id]);
+  };
+
+  load();
+
+  return () => {
+    mounted = false;
+  };
+}, [id]);
+
 
   if (loading)
     return <div className="min-h-[40vh] flex items-center justify-center">Loading...</div>;
@@ -57,11 +80,11 @@ export default function EditPage() {
     }
   };
 
-  const handleImage = (file) => {
+  const handleImage = (file: File| null) => {
     if (!file) return;
-    const url = URL.createObjectURL(file);
+    const url= URL.createObjectURL(file);
     setPreview(url);
-    setContent({ ...content, image: file });
+    setContent({ ...(content as CourseContent), coverImage: file });
   };
 
   return (
@@ -69,15 +92,25 @@ export default function EditPage() {
       <div className="max-w-3xl mx-auto">
         {/* Top Bar */}
         <div className="flex items-center justify-between mb-6">
-          <Button variant="outline" onClick={() => navigate(-1)} className="gap-2 rounded-2xl">
-            <ArrowLeft size={16} /> Back
-          </Button>
+         <Button
+  onClick={() => navigate(-1)}
+  className="gap-2 rounded-2xl border border-gray-300 hover:bg-gray-100"
+>
+  <ArrowLeft size={16} /> Back
+</Button>
 
-          <div className="flex items-center gap-2">
-            <Sun size={16} />
-            <Switch checked={dark} onCheckedChange={() => setDark(!dark)} />
-            <Moon size={16} />
-          </div>
+
+          <div className="flex items-center gap-3">
+  <button
+    type="button"
+    onClick={() => setDark(!dark)}
+    className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+    aria-label="Toggle theme"
+  >
+    {dark ? <Moon size={18} /> : <Sun size={18} />}
+  </button>
+</div>
+
         </div>
 
         {/* Glass Header */}
@@ -101,7 +134,12 @@ export default function EditPage() {
                   <Input
                     className="pl-10 rounded-2xl"
                     value={content?.title ?? ""}
-                    onChange={(e) => setContent({ ...content, title: e.target.value })}
+                    onChange={(e) =>
+  setContent((prev) =>
+    prev ? { ...prev, title: e.target.value } : prev
+  )
+}
+
                     placeholder="Enter course title"
                   />
                   <Save className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
@@ -115,7 +153,12 @@ export default function EditPage() {
                   className="rounded-2xl"
                   rows={4}
                   value={content?.description ?? ""}
-                  onChange={(e) => setContent({ ...content, description: e.target.value })}
+                  onChange={(e) =>
+  setContent((prev) =>
+    prev ? { ...prev, description: e.target.value } : prev
+  )
+}
+
                   placeholder="Short summary of content"
                 />
               </div>
@@ -124,7 +167,10 @@ export default function EditPage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-zinc-700">Upload Image</label>
                 <div className="flex gap-4 items-center">
-                  <Input type="file" onChange={(e) => handleImage(e.target.files[0])} />
+                  <Input type="file" onChange={(e) => {
+    const file = e.target.files?.[0] ?? null;
+    handleImage(file);
+  }} />
                   <ImageIcon />
                 </div>
                 {preview && (
@@ -143,12 +189,12 @@ export default function EditPage() {
                 </Button>
 
                 <Button
-                  variant="outline"
-                  onClick={() => navigate(-1)}
-                  className="rounded-2xl"
-                >
-                  Cancel
-                </Button>
+  onClick={() => navigate(-1)}
+  className="rounded-2xl border border-gray-300 hover:bg-gray-100 px-4 py-2"
+>
+  Cancel
+</Button>
+
               </div>
             </CardContent>
           </Card>
@@ -157,3 +203,7 @@ export default function EditPage() {
     </div>
   );
 }
+function useToast(): { toast: any; } {
+  throw new Error("Function not implemented.");
+}
+

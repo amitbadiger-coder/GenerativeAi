@@ -1,7 +1,7 @@
 import { useAuth } from "@clerk/clerk-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@radix-ui/react-separator";
-import { Loader, FileText, Presentation, NotebookPen } from "lucide-react";
+import { Loader, FileText, NotebookPen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { FormField, FormItem, FormMessage, FormControl, FormLabel } from "../../components/ui/form";
 import {FormProvider, useForm,} from 'react-hook-form'
@@ -12,8 +12,9 @@ import { db } from "@/config/Firebase.config";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import Heading from "@/components/Heading";
+// import Heading from "@/components/Heading";
 import { chatSession } from "@/scripts";
+import type { SubmitHandler}  from "react-hook-form";
 
 // ============= ZOD SCHEMA =============
 const courseSchema = z.object({
@@ -21,23 +22,12 @@ const courseSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters."),
   level: z.string().min(1),
   duration: z.string().min(1),
-  modules: z.string()
-    .transform((val, ctx) => {
-        const parsed = parseInt(val, 10);
-        if (isNaN(parsed)) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Must be a valid number of modules",
-            });
-            return z.NEVER;
-        }
-        return parsed;
-    })
-    .pipe(z.number().min(1, "Minimum 1 module")),
+  modules: z.number().min(1, "Minimum 1 module"),
   outputType: z.enum(["ppt", "summary", "pdf", "full-course"]),
 });
 
-type FormData = z.infer<typeof courseSchema>;
+type FormData = z.input<typeof courseSchema>;
+// type ParsedFormData = z.infer<typeof courseSchema>;
 
 // ============= IMAGE GENERATION SERVICES =============
 const generateImageWithHuggingFace = async (prompt: string): Promise<string> => {
@@ -303,32 +293,33 @@ const extractConceptsFromContent = (content: string, courseTitle: string): strin
 };
 
 // Alternative: Use AI to generate better image prompts
-const generateEnhancedImagePromptWithAI = async (basePrompt: string, context: string): Promise<string> => {
-  const enhancementPrompt = `
-    Improve this image description to make it more specific and relevant to the course context.
+// const generateEnhancedImagePromptWithAI = async (basePrompt: string, context: string): Promise<string> => {
+//   const enhancementPrompt = `
+//     Improve this image description to make it more specific and relevant to the course context.
     
-    Original description: "${basePrompt}"
-    Course context: "${context}"
+//     Original description: "${basePrompt}"
+//     Course context: "${context}"
     
-    Create a detailed, specific image prompt that:
-    1. Is directly relevant to the course topic
-    2. Includes specific visual elements related to the content
-    3. Uses professional educational style
-    4. Avoids generic or stock photo descriptions
-    5. Includes concrete visual concepts
+//     Create a detailed, specific image prompt that:
+//     1. Is directly relevant to the course topic
+//     2. Includes specific visual elements related to the content
+//     3. Uses professional educational style
+//     4. Avoids generic or stock photo descriptions
+//     5. Includes concrete visual concepts
     
-    Return only the enhanced image description, no additional text.
-  `;
+//     Return only the enhanced image description, no additional text.
+//   `;
 
-  try {
-    // You would call your AI service here to enhance the prompt
-    // For now, we'll use the manual enhancement
-    return enhanceImagePrompt(basePrompt, context, "educational");
-  } catch (error) {
-    console.warn("Failed to enhance prompt with AI, using fallback");
-    return enhanceImagePrompt(basePrompt, context, "educational");
-  }
-};
+//   try {
+//     // You would call your AI service here to enhance the prompt
+//     // For now, we'll use the manual enhancement
+//     return enhanceImagePrompt(basePrompt, context, "educational");
+//   } catch (error) {
+//     console.warn("Failed to enhance prompt with AI, using fallback");
+//     return enhanceImagePrompt(basePrompt, context, "educational");
+//   }
+// };
+
 
 // ============= COMPONENT =============
 const CreateCourse = () => {
@@ -339,7 +330,7 @@ const CreateCourse = () => {
       description: "",
       level: "Beginner",
       duration: "",
-      modules: 5,
+      modules: 1,
       outputType: "full-course",
     }
   });
@@ -531,16 +522,16 @@ const applyJSONFixes = (jsonString: string): string => {
     .replace(/\/\/.*$/gm, '')
     .replace(/\/\*[\s\S]*?\*\//g, '')
     // Fix newlines in strings
-    .replace(/"(.*?)"/g, (match, group) => {
+    .replace(/"(.*?)"/g, ( group) => {
       return '"' + group.replace(/\n/g, '\\n') + '"';
     })
     // Ensure proper array formatting
-    .replace(/"lessons":\s*\[(.*?)\]/gs, (match, lessonsContent) => {
+    .replace(/"lessons":\s*\[(.*?)\]/gs, (lessonsContent) => {
       const fixedLessons = lessonsContent
         .split(',')
-        .map(lesson => lesson.trim())
-        .filter(lesson => lesson.length > 0)
-        .map(lesson => lesson.startsWith('"') ? lesson : `"${lesson}"`)
+        .map((lesson: string) => lesson.trim())
+        .filter((lesson: string) => lesson.length > 0)
+        .map((lesson:string) => lesson.startsWith('"') ? lesson : `"${lesson}"`)
         .join(',');
       return `"lessons":[${fixedLessons}]`;
     });
@@ -587,7 +578,7 @@ const createFallbackContent = (originalText: string) => {
 };
 
   // ============= SUBMIT =============
-const onSubmit = async (formData: any) => {
+const onSubmit: SubmitHandler<FormData> = async (formData) => {
     try {
       if (!userId) {
         toast.error("Authentication Error", { description: "User ID is missing." });
@@ -610,7 +601,7 @@ const onSubmit = async (formData: any) => {
         description: formData.description,
         level: formData.level,
         duration: formData.duration,
-        modules: parseInt(formData.modules) || 1,
+        modules: formData.modules || 1,
         outputType: formData.outputType,
         userId,
         createdAt: serverTimestamp(),
@@ -658,12 +649,14 @@ const onSubmit = async (formData: any) => {
             >
               {/* Title */}
               <FormField
-                control={form.control}
                 name="title"
+                 control={form.control}
+                
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-black font-semibold text-base">Course Title</FormLabel>
                     <FormControl>
+                     
                       <Input 
                         {...field} 
                         placeholder="e.g., Mastering React.js" 
@@ -746,13 +739,14 @@ const onSubmit = async (formData: any) => {
                     <FormItem>
                       <FormLabel className="text-black font-semibold text-base">Number of Modules</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="number" 
-                          {...field} 
-                          min="1" 
-                          placeholder="Minimum 1" 
-                          className="border-2 border-gray-300 rounded-xl h-12 px-4 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 transition-all"
-                        />
+                        <Input
+  type="number"
+  value={field.value ?? 1}
+  onChange={(e) => field.onChange(e.target.value)}
+  min={1}
+  placeholder="Minimum 1"
+  className="border-2 border-gray-300 rounded-xl h-12 px-4"
+ />
                       </FormControl>
                       <FormMessage className="text-red-500 font-medium" />
                     </FormItem>

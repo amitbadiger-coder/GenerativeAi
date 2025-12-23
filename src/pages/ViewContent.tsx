@@ -19,8 +19,8 @@ const ViewContent = () => {
 
   const [content, setContent] = useState<CourseContent | null>(null);
   const [loading, setLoading] = useState(true);
-  const [speaking, setSpeaking] = useState(false);
-const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
+  const [, setSpeaking] = useState(false);
+const [, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
 
 const speakText = (text: string) => {
   if (!text) return;
@@ -43,9 +43,9 @@ const pauseSpeech = () => {
   window.speechSynthesis.pause();
 };
 
-const resumeSpeech = () => {
-  window.speechSynthesis.resume();
-};
+// const resumeSpeech = () => {
+//   window.speechSynthesis.resume();
+// };
 
 const stopSpeech = () => {
   window.speechSynthesis.cancel();
@@ -141,8 +141,8 @@ const stopSpeech = () => {
       
       pdf.setFontSize(12);
       pdf.setTextColor(0, 0, 0); // Black for content
-      
-      sections.forEach((section: string, index: number) => {
+                                        // index: number
+      sections.forEach((section: string, ) => {
         // Check if we need a new page
         if (yPosition > 270) {
           pdf.addPage();

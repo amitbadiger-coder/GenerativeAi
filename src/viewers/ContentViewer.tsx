@@ -4,18 +4,36 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/config/Firebase.config"; 
 import { Loader2 } from "lucide-react";
 
+interface CourseContent {
+  fileUrl: string;
+  longText: string;
+  id: string;
+  title: string;
+  description: string;
+  level: string;
+  duration: string;
+  modules: number;
+  outputType: "ppt" | "summary" | "pdf" | "full-course";
+  generated: any;
+}
+
 const ContentViewer = () => {
-  const { id } = useParams();
-  const [content, setContent] = useState(null);
+ const { id } = useParams<{ id: string }>();
+  const [content, setContent] = useState<CourseContent |null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
-      const ref = doc(db, "courses", id);
+      const ref = doc(db, "courses", id!);
       const snap = await getDoc(ref);
 
       if (snap.exists()) {
-        setContent({ id: snap.id, ...snap.data() });
+        const data = snap.data() as Omit<CourseContent, "id">;
+        setContent({
+    id: snap.id,
+    ...data,
+  });
+
       }
 
       setLoading(false);
@@ -33,7 +51,7 @@ const ContentViewer = () => {
 
   if (!content) return <h2>No Content Found</h2>;
 
-  const type = content.contentType?.toLowerCase();
+  const type = content.outputType.toLowerCase();
 
   return (
     <div className="p-6 max-w-4xl mx-auto">

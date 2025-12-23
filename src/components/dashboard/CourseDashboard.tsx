@@ -132,10 +132,18 @@ const CourseDashboard = () => {
             />
           ))
         ) : courses.length > 0 ? (
-          courses.map((course, index) => (
+          courses.map((content, index) => (
             <CourseContentPin
-              key={course.id}
-              course={course}
+              key={content.id}
+              content={{
+    ...content,
+    coverImage: content.coverImage || null,
+    level: content.level || "",
+    duration: content.duration || "",
+    modules: content.modules || 0,
+    outputType: content.outputType || "ppt",
+    generated: content.generated || null,
+  }}
               index={index}
               onRead={handleRead}
               onEdit={handleEdit}

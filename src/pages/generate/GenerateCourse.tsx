@@ -1,5 +1,4 @@
 import CourseDashboard from '@/components/dashboard/CourseDashboard'
-import React from 'react'
 
 const GenerateCourse = () => {
   return (
