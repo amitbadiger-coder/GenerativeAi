@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCourseById } from "@/api/courseApi";
+import { getCourseById } from "@/api/userApi";
 
 interface CourseContent {
   id: string;
