@@ -43,6 +43,10 @@ const EditCourse = () => {
 
   const handleSave = async () => {
     if (!course) return;
+    if (!id) {
+    toast.error("Course ID is missing");
+    return;
+  }
 
     try {
       setSaving(true);
